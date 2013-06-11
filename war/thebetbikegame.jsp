@@ -4,8 +4,8 @@
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
-<%@ page import="betbikegame.Greeting" %>
-<%@ page import="betbikegame.PMF" %>
+<%@ page import="betbikegame.beans.Greeting" %>
+<%@ page import="betbikegame.actions.PMF" %>
 
 <html>
   <body>
