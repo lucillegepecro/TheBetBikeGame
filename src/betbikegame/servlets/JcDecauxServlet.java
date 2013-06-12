@@ -17,12 +17,15 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
+import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
 
+import betbikegame.actions.PMF;
+import betbikegame.beans.Ville;
 import betbikegame.utils.Constantes;
 
 import com.google.appengine.labs.repackaged.org.json.JSONException;
@@ -50,9 +53,9 @@ public class JcDecauxServlet {
 				
 		String apikey = jcdecaux.getString("apikey");
 		
-		String ville = "paris";
+		String country = "paris";
 		
-		String url = "https://api.jcdecaux.com/vls/v1/stations?contract="+ ville + "&apiKey=" + apikey;
+		String url = "https://api.jcdecaux.com/vls/v1/stations?contract="+ country + "&apiKey=" + apikey;
 			
 		// Requete JcDecaux
 		BufferedReader br = connection(url);
@@ -64,13 +67,25 @@ public class JcDecauxServlet {
 		st = station.split(Constantes.VIRGULE);
 		List<String> stations = Arrays.asList(st);
 		
-		String available_bike_stands = parserJson(br, "available_bike_stands");
+		String available_bike_standsS = parserJson(br, "available_bike_stands");
+		
+		Integer available_bike_stands = Integer.parseInt(available_bike_standsS);
 		
 		String contract = parserJson(br, "contract");
 		
 		log.info("stations : " + stations.toString());
 		log.info("available_bike_stands : " + available_bike_stands);
 		log.info("contract : " + contract);
+		
+		// envoi à la base données
+		Ville ville = new Ville(contract, stations, available_bike_stands);
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+        try {
+            pm.makePersistent(ville);
+        } finally {
+            pm.close();
+        }
 	}
 	
 	
@@ -136,5 +151,6 @@ public class JcDecauxServlet {
 		}
 		return res;
 	}
+	
 	
 }

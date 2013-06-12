@@ -38,6 +38,21 @@ public class Ville {
 	@Persistent
 	private Float kilometers;
 
+
+	/**
+	 * 
+	 * @param name
+	 * @param stations
+	 * @param available_bike_stands
+	 */
+	public Ville(String name, List<String> stations,
+			Integer available_bike_stands) {
+		super();
+		this.name = name;
+		this.stations = stations;
+		this.available_bike_stands = available_bike_stands;
+	}
+
 	/*
 	 * GETTERS
 	 */
