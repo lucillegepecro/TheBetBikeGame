@@ -2,6 +2,7 @@ package betbikegame.servlets;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,6 +15,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +25,10 @@ import betbikegame.actions.PMF;
 import betbikegame.beans.Ville;
 import betbikegame.utils.Constantes;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 
@@ -48,6 +54,7 @@ public class JcDecauxServlet extends HttpServlet {
      * @param resp
      * @throws IOException
      */
+    @Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)  
             throws IOException {
 				
@@ -58,8 +65,10 @@ public class JcDecauxServlet extends HttpServlet {
 		String url = "https://api.jcdecaux.com/vls/v1/stations?contract="+ country + "&apiKey=" + apikey;
 		
 			
+		
+		
 		// Requete JcDecaux
-		BufferedReader br = connection(url);
+		//BufferedReader br = connection(url);
 		
 		// Lecture fichier Json
 		String station;
@@ -67,8 +76,6 @@ public class JcDecauxServlet extends HttpServlet {
 		String available_bike_standsS;
 		String contract = null;
 		Integer available_bike_stands = null;
-		
-		
 		
 
 		// Envoi � la base donn�es
@@ -101,24 +108,20 @@ public class JcDecauxServlet extends HttpServlet {
 			log.warning(e.getMessage());
 		}
 		
-		URLConnection yc = null;
+		InputStream yc = null;
 		
 		// Connexion		
 		try {			
-			yc = url.openConnection();		
+			yc = url.openStream();		
 		} catch (IOException e) {	
 			log.warning(e.getMessage());
 		}
 		
 		BufferedReader in = null;
 		
-		// Lecture
-		try {			
-			if (yc != null) {				
-			in = new BufferedReader(new InputStreamReader(yc.getInputStream()));			
-			}		
-		} catch (IOException e) {	
-			log.warning(e.getMessage());
+		if (yc != null) {			
+			in = new BufferedReader(new InputStreamReader(yc));
+		
 		}
 	
 		return in;

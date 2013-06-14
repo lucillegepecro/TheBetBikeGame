@@ -30,37 +30,7 @@
 </head>
 <body class="homepage">
 
-	<!-- Sign in message -->
-	<%
-		UserService userService = UserServiceFactory.getUserService();
-		User user = userService.getCurrentUser();
 
-		if (user != null) {
-	%>
-	<div>
-	<h1>
-		Bienvenue,
-		<%=user.getNickname()%>
-		!
-	</h1>
-	
-		(You can <a
-			href="<%=userService.createLogoutURL(request.getRequestURI())%>">sign
-			out</a>.)
-	</div>
-	<%
-		} else {
-	%>
-	<div>
-	<h1>Bienvenue!</h1>
-	
-		(You can <a
-			href="<%=userService.createLoginURL(request.getRequestURI())%>">Sign
-			in</a> .)
-	</div>
-	<%
-		}
-	%>
 
 
 	<!-- Header Wrapper -->
@@ -104,7 +74,38 @@
 						<div>
 							<div class="row">
 								<div class="7u">
-									<div id="map-canvas"></div>
+										<!-- Sign in message -->
+	<%
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
+
+		if (user != null) {
+	%>
+	<div>
+	<p>
+		Bienvenue <%=user.getNickname()%> !
+		
+	</p>
+	
+		(You can <a
+			href="<%=userService.createLogoutURL(request.getRequestURI())%>">sign
+			out</a>.)
+			
+	</div>
+	<%
+		} else {
+	%>
+	<div>
+<p>Bienvenue !</p>
+	
+		(You can <a
+			href="<%=userService.createLoginURL(request.getRequestURI())%>">Sign
+			in</a> .)
+			
+	</div>
+	<%
+		}
+	%>
 								</div>
 								<div class="5u">
 									<ul>

@@ -52,8 +52,9 @@ public class AccueilServlet extends HttpServlet {
         String ville = null;
 		 Pari pari = new Pari(ville, user, date);
 
-		 // récupère les paris en cours
-		 JDO jdo = new JDO();
+		 session.setAttribute("deja_parie", "false");
+		 // rï¿½cupï¿½re les paris en cours
+		 /*JDO jdo = new JDO();
 		 List<Pari> paris = jdo.getJDOPari("select from ");
 		 
 		 System.out.println("USR : " + user);
@@ -72,7 +73,7 @@ public class AccueilServlet extends HttpServlet {
 			 		}
 		 		}
 		 	}
-		 }
+		 }*/
 		 
 		 this.getServletContext().getRequestDispatcher("/bet.jsp" ).forward(request, response);
 		

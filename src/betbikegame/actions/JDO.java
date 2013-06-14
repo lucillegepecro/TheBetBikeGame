@@ -22,6 +22,7 @@ public class JDO {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		 String query = request + Pari.class.getName();
 		 List<Pari> obj = (List<Pari>) pm.newQuery(query).execute();
+		 
 		 return obj;
 	}
 }

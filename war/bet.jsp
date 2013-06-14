@@ -42,7 +42,7 @@ User user = userService.getCurrentUser();
 if (session.getAttribute("deja_parie")== "false"){
 %>
 <p> Vous n'avez pas encore parié aujourd'hui, c'est le moment ! </p>
-<form action="/bet" method="post">
+<form action="/bet" method="get">
     <div><input type="text" name="villePari"></input></div>
     <div><input type="submit" value="Parier!" /></div>
     </form>
