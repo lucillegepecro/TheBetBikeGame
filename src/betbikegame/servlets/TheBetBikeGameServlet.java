@@ -1,6 +1,5 @@
 package betbikegame.servlets;
 
-
 import java.io.IOException;
 import javax.servlet.http.*;
 import com.google.appengine.api.users.User;
@@ -8,6 +7,10 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 public class TheBetBikeGameServlet extends HttpServlet {
+	
+	/**
+	 * 
+	 */
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
               throws IOException {
         UserService userService = UserServiceFactory.getUserService();
@@ -15,7 +18,7 @@ public class TheBetBikeGameServlet extends HttpServlet {
 
         if (user != null) {
             resp.setContentType("text/plain");
-            resp.getWriter().println("Hello, " + user.getNickname());
+            resp.getWriter().println("Bienvenue, " + user.getNickname());
         } else {
             resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
         }

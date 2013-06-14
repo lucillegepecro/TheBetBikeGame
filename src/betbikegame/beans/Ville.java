@@ -7,9 +7,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.users.User;
 
 
 /**
@@ -25,14 +24,12 @@ public class Ville {
     private Key key;
 	
 	@Persistent
-	@JsonProperty("contract")
 	private String name;
 	
 	@Persistent
 	private List<String> stations;
 	
 	@Persistent
-	@JsonProperty("available_bike_stands")
 	private Integer available_bike_stands;
 	
 	@Persistent
@@ -51,6 +48,13 @@ public class Ville {
 		this.name = name;
 		this.stations = stations;
 		this.available_bike_stands = available_bike_stands;
+	}
+	
+	/**
+	 * 
+	 */
+	public Ville(){
+		
 	}
 
 	/*

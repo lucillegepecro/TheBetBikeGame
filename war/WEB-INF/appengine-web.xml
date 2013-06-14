@@ -13,6 +13,8 @@
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
   </system-properties>
 
+ <sessions-enabled>true</sessions-enabled>
+
   <!--
   http://betbikegames.appspot.com/
    Si vous modifiez le fichier web.xml ou tout autre fichier de configuration, vous devez arrêter, puis redémarrer le serveur pour que les modifications prennent effet.

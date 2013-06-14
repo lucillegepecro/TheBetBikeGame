@@ -13,9 +13,14 @@ import com.google.appengine.api.users.UserServiceFactory;
 import betbikegame.actions.PMF;
 import betbikegame.beans.Greeting;
 
-public class LivreOrServlet extends HttpServlet {
-    private static final Logger log = Logger.getLogger(LivreOrServlet.class.getName());
 
+public class LivreOrServlet extends HttpServlet {
+	
+	private static final Logger log = Logger.getLogger(LivreOrServlet.class.getName());
+
+	/**
+	 * 
+	 */
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
                 throws IOException {
         UserService userService = UserServiceFactory.getUserService();
