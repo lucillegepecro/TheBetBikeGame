@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/jcdecaux</url>
+    <description>Requete sur les open data jcdecaux</description>
+    <schedule>every 1 hours</schedule>
+  </cron>
+  
+</cronentries>
