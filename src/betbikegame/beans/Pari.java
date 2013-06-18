@@ -1,8 +1,5 @@
 package betbikegame.beans;
 
-import java.util.Date;
-import java.util.List;
-
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -31,7 +28,7 @@ public class Pari {
 	private User user;
 	
 	@Persistent
-	private Date date;
+	private String date;
 
 	
 
@@ -41,7 +38,7 @@ public class Pari {
 	 * @param ville
 	 * @param user
 	 */
-	public Pari(String ville, User user, Date date) {
+	public Pari(String ville, User user, String date) {
 		super();
 		this.date = date;
 		this.ville = ville;
@@ -55,12 +52,12 @@ public class Pari {
 		
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	public String getVille() {

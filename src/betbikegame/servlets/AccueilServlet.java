@@ -2,25 +2,21 @@ package betbikegame.servlets;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
-import javax.jdo.PersistenceManager;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-
-import betbikegame.actions.JDO;
-import betbikegame.actions.PMF;
-import betbikegame.beans.Pari;
-import betbikegame.beans.Ville;
 
 /**
  * Servlet implementation class BetServlet
@@ -45,35 +41,41 @@ public class AccueilServlet extends HttpServlet {
 		UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
         
-        Date date = new java.util.Date();
+        Date date1 = new java.util.Date();
+        String date = date1.getDay() + " " + date1.getMonth() + " " + date1.getYear();
         HttpSession session = request.getSession();
         session.setAttribute("date", date);
-        
-        String ville = null;
-		 Pari pari = new Pari(ville, user, date);
 
 		 session.setAttribute("deja_parie", "false");
-		 // rï¿½cupï¿½re les paris en cours
-		 /*JDO jdo = new JDO();
-		 List<Pari> paris = jdo.getJDOPari("select from ");
 		 
-		 System.out.println("USR : " + user);
-		 
-		 session.setAttribute("deja_parie", "false");
-		 if (paris != null) {
-		 	for (int i=0 ; i<paris.size() ; i++) {
-		 		System.out.println(paris.get(i).getUser());
-		 		System.out.println(paris.get(i).getVille());
-		 		if (paris.get(i).getUser() == user) {
-			 		if ((paris.get(i).getDate().getDay() ==  date.getDay()) 
-			 				&& ( paris.get(i).getDate().getMonth() == date.getMonth()) 
-			 				&&  (paris.get(i).getDate().getYear()) == date.getYear()){
-			 			session.setAttribute("villePari", paris.get(i).getVille());
-			 			session.setAttribute("deja_parie", "true");
-			 		}
-		 		}
-		 	}
-		 }*/
+		 /**
+		  *  récupère les paris en cours
+		  */
+
+		// Get the Datastore Service
+		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		 // The Query interface assembles a query
+		 Query q = new Query("Pari");
+		 q.addFilter("date", Query.FilterOperator.EQUAL, date);
+
+		 // PreparedQuery contains the methods for fetching query results
+		 // from the datastore
+		 PreparedQuery pq = datastore.prepare(q);
+		 		 
+		 if (pq != null){
+
+			 for (Entity result : pq.asIterable()) {
+				 
+			   String ville = (String) result.getProperty("ville");
+			   String userq = (String) result.getProperty("user");
+			   
+			   if (userq.equalsIgnoreCase(user.toString())){	   
+				   session.setAttribute("deja_parie", "true");
+				   session.setAttribute("villePari", ville);
+			   }
+			 }
+		 }
 		 
 		 this.getServletContext().getRequestDispatcher("/bet.jsp" ).forward(request, response);
 		

@@ -37,6 +37,6 @@ public class LivreOrServlet extends HttpServlet {
             pm.close();
         }
 
-        resp.sendRedirect("/thebetbikegame.jsp");
+        resp.sendRedirect("/guestbook.jsp");
     }
 }

@@ -1,7 +1,6 @@
 package betbikegame.servlets;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,8 +16,6 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
-import betbikegame.actions.JDO;
-import betbikegame.beans.Pari;
 
 /**
  * Servlet implementation class BetServlet
@@ -45,29 +42,16 @@ public class BetServlet extends HttpServlet {
         
 		HttpSession session = request.getSession();
 
-		//Pari pari = new Pari();
-		//JDO jdo = new JDO();
-		
-		/*pari.setVille(request.getParameter("villePari"));
-		pari.setDate((Date)session.getAttribute("date"));
-		pari.setUser(user);
-		jdo.putJDO(pari);*/
-		
+		// Envoi en base de données le pari du joueur
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();		
 		Entity pari = new Entity("Pari", KeyFactory.createKey("ListeParis", "paris"));
 		pari.setProperty("date", session.getAttribute("date"));	
 		pari.setProperty("ville", request.getParameter("villePari"));
-		pari.setProperty("user", user.getNickname());
-		
-		System.out.println(pari.getProperty("date"));
-		System.out.println(pari.getProperty("ville"));
-		System.out.println(pari.getProperty("user"));
-		
+		pari.setProperty("user", user.getNickname());	
+		pari.setProperty("mise", request.getParameter("misePari"));
 		datastore.put(pari);
-		
-		
-		
-		this.getServletContext().getRequestDispatcher("/accueil" ).forward(request, response);
+
+		this.getServletContext().getRequestDispatcher("/accueil.jsp" ).forward(request, response);
 	}
 
 	/**

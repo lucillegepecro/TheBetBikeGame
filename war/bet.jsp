@@ -44,12 +44,14 @@ if (session.getAttribute("deja_parie")== "false"){
 <p> Vous n'avez pas encore parié aujourd'hui, c'est le moment ! </p>
 <form action="/bet" method="get">
     <div><input type="text" name="villePari"></input></div>
+    <p> Vous pouvez miser des vélo$ sur votre pari </p>
+    <div><input type="text" name="misePari"></input></div>
     <div><input type="submit" value="Parier!" /></div>
     </form>
 <%
 } else if (session.getAttribute("deja_parie")== "true") {
 %>
-<p> Vous avez parié sur <%= request.getAttribute("villePari") %> </p>
+<p> Vous avez parié sur <%= session.getAttribute("villePari") %> </p>
 
  <% } %>
  

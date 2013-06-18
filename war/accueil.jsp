@@ -48,11 +48,11 @@
 
 					<!-- Nav --> <nav id="nav">
 					<ul>
-						<li class="current_page_item"><a href="index.html">Bienvenue</a>
+						<li class="current_page_item"><a href="accueil.jsp">Accueil</a>
 						</li>
 						<li><a href="left-sidebar.html">Historique</a>
 						</li>
-						<li><a href="right-sidebar.html">Livre d'or</a>
+						<li><a href="guestbook.jsp">Livre d'or</a>
 						</li>
 					</ul>
 					</nav> </header>
@@ -79,7 +79,18 @@
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 
-		if (user != null) {
+		if (user == null) {
+	%>
+	<div>
+		<p>Bienvenue !</p>
+	
+		(You can <a
+			href="<%=userService.createLoginURL(request.getRequestURI())%>">Sign
+			in</a> .)
+			
+	</div>
+	<%
+		} else {
 	%>
 	<div>
 	<p>
@@ -92,20 +103,8 @@
 			out</a>.)
 			
 	</div>
-	<%
-		} else {
-	%>
-	<div>
-<p>Bienvenue !</p>
 	
-		(You can <a
-			href="<%=userService.createLoginURL(request.getRequestURI())%>">Sign
-			in</a> .)
-			
-	</div>
-	<%
-		}
-	%>
+	
 								</div>
 								<div class="5u">
 									<ul>
@@ -128,7 +127,9 @@
 			</div>
 		</div>
 	</div>
-
+<%
+		}
+	%>
 	<!-- Features Wrapper -->
 	<div id="features-wrapper">
 		<div class="container">
