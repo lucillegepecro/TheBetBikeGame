@@ -6,4 +6,10 @@
     <schedule>every 1 hours</schedule>
   </cron>
   
+    <cron>
+    <url>/win</url>
+    <description>Requete de resultat</description>
+    <schedule>every day 19:00</schedule>
+  </cron>
+  
 </cronentries>

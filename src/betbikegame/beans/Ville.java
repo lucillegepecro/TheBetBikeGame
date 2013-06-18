@@ -33,7 +33,7 @@ public class Ville {
 	private Integer available_bike_stands;
 	
 	@Persistent
-	private Float kilometers;
+	private Double km;
 
 
 	/**
@@ -42,12 +42,11 @@ public class Ville {
 	 * @param stations
 	 * @param available_bike_stands
 	 */
-	public Ville(String name, List<String> stations,
-			Integer available_bike_stands) {
+	public Ville(String name, Double km) {
 		super();
 		this.name = name;
-		this.stations = stations;
-		this.available_bike_stands = available_bike_stands;
+		this.km=km;
+
 	}
 	
 	/**
@@ -76,8 +75,8 @@ public class Ville {
 		return available_bike_stands;
 	}
 	
-	public Float getKilometers() {
-		return kilometers;
+	public Double getKilometers() {
+		return km;
 	}
 	
 	/*
@@ -94,8 +93,8 @@ public class Ville {
 		this.available_bike_stands = available_bike_stands;
 	}
 
-	public void setKilometers(Float kilometers) {
-		this.kilometers = kilometers;
+	public void setKilometers(Double km) {
+		this.km = km;
 	}
 	
 	

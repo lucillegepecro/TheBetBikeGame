@@ -22,5 +22,7 @@ public class TheBetBikeGameServlet extends HttpServlet {
         } else {
             resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
         }
+        
+        
     }
 }

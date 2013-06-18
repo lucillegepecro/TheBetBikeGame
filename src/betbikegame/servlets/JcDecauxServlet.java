@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -55,6 +56,8 @@ public class JcDecauxServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)  
             throws IOException {
 				
+    	HttpSession session = req.getSession();
+    	
 		String apikey = jcdecaux.getString("apikey");
 		
 		String url_contract = "https://api.jcdecaux.com/vls/v1/contracts?apiKey=" + apikey;
@@ -64,20 +67,21 @@ public class JcDecauxServlet extends HttpServlet {
 		Double km = 0.0;
 
 		List<String> villes = new ArrayList<String>();
-
-		// récupère la liste des villes
+		
+		// rï¿½cupï¿½re la liste des villes
 		String st_contract = connection(url_contract);	
 		
 		// parser br_km pour sortir la liste des villes : remplir "villes"
 		villes = getContracts(st_contract);
+		session.setAttribute("villes", villes);
 		
-		// pour chaque ville, récupérer la liste des stations avec leur nb de vélos empruntés
+		// pour chaque ville, rï¿½cupï¿½rer la liste des stations avec leur nb de vï¿½los empruntï¿½s
 		for (int i=0 ; i<villes.size() ; i++){
 			country = villes.get(i);
 			
 			String url_km = "https://api.jcdecaux.com/vls/v1/stations?contract="+ country + "&apiKey=" + apikey;
 			
-			// récupère le flux json des velos empruntés par ville
+			// rï¿½cupï¿½re le flux json des velos empruntï¿½s par ville
 			String st_km = connection(url_km);
 				
 			// nb de km dans la ville
@@ -92,27 +96,19 @@ public class JcDecauxServlet extends HttpServlet {
 
 			 // PreparedQuery contains the methods for fetching query results
 			 // from the datastore
-			 PreparedQuery pq = datastore.prepare(q);
-			 		 
-			 if (pq != null){
+			 PreparedQuery pq = datastore.prepare(q);			 		 
 
 				 for (Entity result : pq.asIterable()) {
 					 
 				   Double km_old = (Double) result.getProperty("km");
-				   System.out.println(km_old);
-				   System.out.println(km);
 				   
 				   km = km + km_old;
 				   
 				   result.setProperty("km", km);
-				   datastore.delete();
+
 				   datastore.put(result);
-				   
-				   System.out.println(km);
-				   System.out.println();
-				 }
-				 
-			 } else {
+
+				}
 			 			
 				Entity ville = new Entity("Ville", KeyFactory.createKey("ListeVilles", "villes"));
 				
@@ -123,7 +119,7 @@ public class JcDecauxServlet extends HttpServlet {
 				System.out.println("ville inexistante");
 				
 				datastore.put(ville);
-			 }
+
 		}			
 	}
 	
@@ -162,7 +158,7 @@ public class JcDecauxServlet extends HttpServlet {
 		
 		String inputLine;
 		String source = "";
-		// On remplit le String retourné avec les infos récupérées
+		// On remplit le String retournï¿½ avec les infos rï¿½cupï¿½rï¿½es
 		try {
 		if (in != null) {
 		while ((inputLine = in.readLine()) != null)

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.mortbay.log.Log;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -46,10 +48,10 @@ public class AccueilServlet extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("date", date);
 
-		 session.setAttribute("deja_parie", "false");
+		session.setAttribute("deja_parie", "false");
 		 
 		 /**
-		  *  récupère les paris en cours
+		  *  rï¿½cupï¿½re les paris en cours
 		  */
 
 		// Get the Datastore Service
@@ -58,24 +60,23 @@ public class AccueilServlet extends HttpServlet {
 		 // The Query interface assembles a query
 		 Query q = new Query("Pari");
 		 q.addFilter("date", Query.FilterOperator.EQUAL, date);
-
+		 
 		 // PreparedQuery contains the methods for fetching query results
 		 // from the datastore
 		 PreparedQuery pq = datastore.prepare(q);
-		 		 
-		 if (pq != null){
+		 //Log.info("Requete : " + pq);	
+		 
+		for (Entity result : pq.asIterable()) {
 
-			 for (Entity result : pq.asIterable()) {
-				 
-			   String ville = (String) result.getProperty("ville");
-			   String userq = (String) result.getProperty("user");
-			   
-			   if (userq.equalsIgnoreCase(user.toString())){	   
-				   session.setAttribute("deja_parie", "true");
-				   session.setAttribute("villePari", ville);
-			   }
-			 }
-		 }
+			String ville = (String) result.getProperty("ville");
+			String userq = (String) result.getProperty("user");
+
+			if (userq.equalsIgnoreCase(user.toString())) {
+				//Log.info("User trouve : " + userq);
+				session.setAttribute("deja_parie", "true");
+				session.setAttribute("villePari", ville);
+			}
+		}
 		 
 		 this.getServletContext().getRequestDispatcher("/bet.jsp" ).forward(request, response);
 		
