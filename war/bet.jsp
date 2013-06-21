@@ -179,8 +179,7 @@
 														.getDatastoreService();
 												// Récupère le classement final de la journée
 												Query q = new Query("Pari");
-												q.addFilter("user", Query.FilterOperator.EQUAL,
-														user.getNickname());
+
 												PreparedQuery pq = datastore.prepare(q);
 									%>
 
@@ -196,10 +195,12 @@
 
 											<%
 												for (Entity result : pq.asIterable()) {
-															pari.setDate((String) result.getProperty("date"));
-															pari.setVille((String) result.getProperty("ville"));
-															pari.setResultat((String) result.getProperty("resultat"));
-															listparis.add(pari);
+													if ( ( (String) result.getProperty("user") ).equalsIgnoreCase( user.toString() ) ){
+														pari.setDate((String) result.getProperty("date"));
+														pari.setVille((String) result.getProperty("ville"));
+														pari.setResultat((String) result.getProperty("resultat"));
+														listparis.add(pari);
+												}
 											%>
 											<tr>
 												<td><%=pari.getVille()%></td>

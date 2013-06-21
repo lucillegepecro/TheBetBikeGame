@@ -53,7 +53,7 @@ public class BetServlet extends HttpServlet {
 		Entity pari = new Entity("Pari", KeyFactory.createKey("ListeParis", "paris"));
 		pari.setProperty("date", session.getAttribute("date"));	
 		pari.setProperty("ville", request.getParameter("villePari"));
-		pari.setProperty("user", user.getNickname());	
+		pari.setProperty("user", user.toString());	
 		pari.setProperty("mise", request.getParameter("misePari"));
 		pari.setProperty("resultat", "en attente");
 		datastore.put(pari);
