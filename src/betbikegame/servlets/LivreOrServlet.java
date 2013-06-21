@@ -21,13 +21,14 @@ public class LivreOrServlet extends HttpServlet {
 	/**
 	 * 
 	 */
-    public void doPost(HttpServletRequest req, HttpServletResponse resp)
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
                 throws IOException {
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
 
         String content = req.getParameter("content");
         Date date = new Date();
+
         Greeting greeting = new Greeting(user, content, date);
 
         PersistenceManager pm = PMF.get().getPersistenceManager();

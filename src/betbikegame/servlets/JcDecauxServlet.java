@@ -32,7 +32,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 
 /**
- * 
+ * Lancement batch. Prise en charge de la récupération des données JcDecaux et traiement des données : table Ville
  * @author anna
  *
  */
@@ -98,27 +98,29 @@ public class JcDecauxServlet extends HttpServlet {
 			 // from the datastore
 			 PreparedQuery pq = datastore.prepare(q);			 		 
 
-				 for (Entity result : pq.asIterable()) {
-					 
-				   Double km_old = (Double) result.getProperty("km");
-				   
-				   km = km + km_old;
-				   
-				   result.setProperty("km", km);
+			for (Entity result : pq.asIterable()) {
 
-				   datastore.put(result);
+				Double km_old = (Double) result.getProperty("km");
 
-				}
-			 			
-				Entity ville = new Entity("Ville", KeyFactory.createKey("ListeVilles", "villes"));
+				km = km + km_old;
+
+				result.setProperty("km", km);
+
+				datastore.put(result);
+
+			}
+			
+			if (pq.countEntities() == 0 ){
 				
-				ville.setProperty("contract", country);	
-				
-				ville.setProperty("km", km);
-				
-				System.out.println("ville inexistante");
-				
-				datastore.put(ville);
+			  Entity ville = new Entity("Ville",
+			  KeyFactory.createKey("ListeVilles", "villes"));
+			  
+			  ville.setProperty("contract", country);
+			  
+			 ville.setProperty("km", km);
+			 
+			 datastore.put(ville);
+			}
 
 		}			
 	}
@@ -249,7 +251,7 @@ public class JcDecauxServlet extends HttpServlet {
 	 		
 	 		nbDispoVelo = nbDispoVelo * 0.4;
 	 		
-	 		km = (nbTotalVelo - nbDispoVelo) * 5;
+	 		km = (nbTotalVelo - nbDispoVelo) * 10 / nbTotalVelo;
 	 		
 	 	
 	 	} catch (JSONException e) {

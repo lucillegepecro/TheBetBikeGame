@@ -11,9 +11,12 @@ import javax.servlet.http.HttpSession;
 
 import org.mortbay.log.Log;
 
+import betbikegame.utils.Constantes;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.User;
@@ -21,9 +24,10 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 /**
- * Servlet implementation class BetServlet
+ * Prise en charge de l'arriv�e sur l'appli, le joueur a-t-il d�j� pari� aujourd'hui : table Pari
+ * @author anna
+ *
  */
-
 public class AccueilServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -44,7 +48,7 @@ public class AccueilServlet extends HttpServlet {
         User user = userService.getCurrentUser();
         
         Date date1 = new java.util.Date();
-        String date = date1.getDay() + " " + date1.getMonth() + " " + date1.getYear();
+        String date = date1.getDate() + " " + date1.getMonth() + " " + date1.getYear();
         HttpSession session = request.getSession();
         session.setAttribute("date", date);
 
@@ -54,28 +58,33 @@ public class AccueilServlet extends HttpServlet {
 		  *  r�cup�re les paris en cours
 		  */
 
-		// Get the Datastore Service
-		 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();		
+		
 		 // The Query interface assembles a query
 		 Query q = new Query("Pari");
-		 q.addFilter("date", Query.FilterOperator.EQUAL, date);
+		 q.addFilter("user", Query.FilterOperator.EQUAL, user.toString());
 		 
-		 // PreparedQuery contains the methods for fetching query results
-		 // from the datastore
+		 // r�cup�re tous les paris du joueur
 		 PreparedQuery pq = datastore.prepare(q);
-		 //Log.info("Requete : " + pq);	
 		 
 		for (Entity result : pq.asIterable()) {
 
 			String ville = (String) result.getProperty("ville");
-			String userq = (String) result.getProperty("user");
-
-			if (userq.equalsIgnoreCase(user.toString())) {
-				//Log.info("User trouve : " + userq);
+			String dateq = (String) result.getProperty("date");
+			
+			// si le user a d�j� pari� aujourd'hui, on r�cup�re les valeurs de son pari
+			if (dateq.equalsIgnoreCase(date)) {
 				session.setAttribute("deja_parie", "true");
 				session.setAttribute("villePari", ville);
-			}
+			} 
+			
+		}
+		// si aucun pari pour ce joueur, alors sa cagnote est initialis�e
+		if (pq.countEntities() == 0){
+			Entity joueur = new Entity("Joueur", KeyFactory.createKey("ListeJoueurs", "joueurs"));
+			joueur.setProperty("cagnote", Constantes.CAGNOTE_INIT);
+			joueur.setProperty("user", user.toString());
+			datastore.put(joueur);
 		}
 		 
 		 this.getServletContext().getRequestDispatcher("/bet.jsp" ).forward(request, response);

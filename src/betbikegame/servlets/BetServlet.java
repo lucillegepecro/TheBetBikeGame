@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import betbikegame.beans.Pari;
 import betbikegame.beans.Ville;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -21,11 +22,11 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
-
 /**
- * Servlet implementation class BetServlet
+ * Prise en charge du pari (ville, mise) du joueur : table Pari, table Joueur
+ * @author anna
+ *
  */
-
 public class BetServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -46,8 +47,6 @@ public class BetServlet extends HttpServlet {
         User user = userService.getCurrentUser();
         
 		HttpSession session = request.getSession();
-		
-		Integer cagnote = 0;
 
 		// Envoi en base de donn�es le pari du joueur
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();		
@@ -56,25 +55,37 @@ public class BetServlet extends HttpServlet {
 		pari.setProperty("ville", request.getParameter("villePari"));
 		pari.setProperty("user", user.getNickname());	
 		pari.setProperty("mise", request.getParameter("misePari"));
+		pari.setProperty("resultat", "en attente");
 		datastore.put(pari);
-			
-		session.setAttribute("misePari", request.getParameter("misePari"));
-		session.setAttribute("villePari", request.getParameter("villePari"));
-		// Récupère la cagnote du jouer
-		Query q = new Query("Joueur");
-		q.addFilter("user", Query.FilterOperator.EQUAL, user);
-
-		PreparedQuery pq = datastore.prepare(q);
-
-		for (Entity result : pq.asIterable()) {
-			Integer cagnote_old = (Integer) result.getProperty("cagnote");
-			cagnote = cagnote_old - Integer.parseInt(request.getParameter("misePari"));
-		}
 		
-		Entity joueur = new Entity("Joueur", KeyFactory.createKey("ListeJoueurs", "joueurs"));
-		pari.setProperty("user", user.getNickname());	
-		pari.setProperty("cagnote", cagnote);
-		datastore.put(joueur);
+		//Pari pariJoueur = new Pari(request.getParameter("villePari"), user, (String) session.getAttribute("date"), "");
+		session.setAttribute("villePari", request.getParameter("villePari"));
+		
+		long cagnote_old = 0;
+		Integer mise =0;
+		
+		// Récupère la cagnote du joueur
+		Query q = new Query("Joueur");
+		
+		PreparedQuery pq = datastore.prepare(q);
+		
+		for (Entity result : pq.asIterable()) {		
+			System.out.println(result.getProperty("user").toString());
+			System.out.println(user.toString());
+			System.out.println();
+			if ((result.getProperty("user").toString()).equals(user.toString())){
+				cagnote_old = (Long) result.getProperty("cagnote");
+				mise = Integer.parseInt((String)request.getParameter("misePari"));
+				System.out.println("init : " + cagnote_old);
+				System.out.println("E/S : " + mise);
+				System.out.println("final : " + (cagnote_old - mise));
+				result.setProperty("cagnote", (cagnote_old - mise) );
+				
+				datastore.put(result);
+			}
+		}
+
+		
 
 		this.getServletContext().getRequestDispatcher("/mesparis.jsp" ).forward(request, response);
 		

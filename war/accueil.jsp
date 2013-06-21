@@ -13,10 +13,7 @@
 	rel="stylesheet" type="text/css" />
 <link href="http://fonts.googleapis.com/css?family=Oleo+Script:400"
 	rel="stylesheet" type="text/css" />
-<script
-	src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBPRmcpdoocTm2UQfrI64Jc-qKk_yOadKs&sensor=true"
-	type="text/javascript"></script>
-<script src="javascript/mymap.js"></script>
+
 <script src="js/jquery.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/skel.min.js"></script>
@@ -42,17 +39,18 @@
 					<!-- Header -->
 					<header id="header"> <!-- Logo -->
 					<div id="logo">
-						<span><img src="images/baniereEnd.png" />
-						</span>
+						<span><img src="images/baniereEnd.png" /> </span>
 					</div>
 
 					<!-- Nav --> <nav id="nav">
 					<ul>
 						<li class="current_page_item"><a href="accueil.jsp">Accueil</a>
 						</li>
-						<li><a href="left-sidebar.html">Historique</a>
+						<li><a href="classement.jsp">Classement</a>
 						</li>
-						<li><a href="guestbook.jsp">Livre d'or</a>
+						<li><a href="/moi">Mes Paris</a>
+						</li>
+						<li><a href="guestbook.jsp">Guestbook</a>
 						</li>
 					</ul>
 					</nav> </header>
@@ -74,50 +72,60 @@
 						<div>
 							<div class="row">
 								<div class="7u">
-										<!-- Sign in message -->
-	<%
-		UserService userService = UserServiceFactory.getUserService();
-		User user = userService.getCurrentUser();
+									<!-- Sign in message -->
+									<%
+										UserService userService = UserServiceFactory.getUserService();
+										User user = userService.getCurrentUser();
 
-		if (user == null) {
-	%>
-	<div>
-		<p>Bienvenue !</p>
-	
-		(You can <a
-			href="<%=userService.createLoginURL(request.getRequestURI())%>">Sign
-			in</a> .)
-			
-	</div>
-	<%
-		} else {
-	%>
-	<div>
-	<p>
-		Bienvenue <%=user.getNickname()%> !
-		
-	</p>
-	
-		(You can <a
-			href="<%=userService.createLogoutURL(request.getRequestURI())%>">sign
-			out</a>.)
-			
-	</div>
-	
-	
+										if (user == null) {
+									%>
+									<div>
+										<p>Bienvenue ! Connectez vous pour commencer à jouer !</p>
+									</div>
+									</div>
+									<div class="5u">
+										<ul>
+
+
+											<li>
+												<a class="button button-big button-icon button-icon-rarrow"
+													href="<%=userService.createLoginURL(request.getRequestURI())%>">Connexion</a>
+											</li>
+										</ul>
+									</div>
+
+									<%
+										} else {
+									%>
+									<div>
+										<p>
+											Bienvenue
+											<%=user.getNickname()%>
+											!
+
+										</p>
+
+										(You can <a
+											href="<%=userService.createLogoutURL(request.getRequestURI())%>">sign
+											out</a>.)
+
+									</div>
+
+
 								</div>
 								<div class="5u">
 									<ul>
-																	
+
 
 										<li>
-										<form action="/accueil" method="get">
-										<a href="/accueil"
-											class="button button-big button-icon button-icon-rarrow">Jouez!</a>
-										</form>
+											<form action="/accueil" method="get">
+												<a href="/accueil"
+													class="button button-big button-icon button-icon-rarrow">Jouez!</a>
+											</form>
 										</li>
 									</ul>
 								</div>
+								<%}%>
 							</div>
 						</div>
 
@@ -126,10 +134,8 @@
 				</div>
 			</div>
 		</div>
-	</div>
-<%
-		}
-	%>
+
+
 	<!-- Features Wrapper -->
 	<div id="features-wrapper">
 		<div class="container">
@@ -139,8 +145,7 @@
 					<!-- Box -->
 					<section class="box box-feature"> <a href="#"
 						class="image image-full"><img src="images/nantesBicloo.jpg"
-						alt="" />
-					</a>
+						alt="" /> </a>
 					<div class="inner">
 						<header>
 						<h2>La ville de Nantes</h2>
@@ -155,8 +160,7 @@
 					<!-- Box -->
 					<section class="box box-feature"> <a href="#"
 						class="image image-full"><img src="images/velibParis.jpg"
-						alt="" />
-					</a>
+						alt="" /> </a>
 					<div class="inner">
 						<header>
 						<h2>La ville de Paris</h2>
@@ -185,12 +189,5 @@
 			</div>
 		</div>
 	</div>
-
-
-
-
-
-
-
 </body>
 </html>
