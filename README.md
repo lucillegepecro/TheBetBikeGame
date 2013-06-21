@@ -23,7 +23,7 @@ A 19h00, le ou les gagnants remportent la totalité des mises de tous les joueur
 
 Un livre d'Or permettant de commenter la course.
 
-La vision de ses paris précédents (sauf la ville) et on sait dans la colonne résultat si on a gagné ou non avec la date.
+La vision de ses paris précédents et on sait dans la colonne résultat si on a gagné ou non avec la date et la ville pariée.
 
 On peut parier quand on veut sauf si on déjà parié aujourd'hui ( dans les 24heures de 19h00 à 19h00).
 
