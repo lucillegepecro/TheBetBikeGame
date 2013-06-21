@@ -1,9 +1,16 @@
 TheBetBikeGame
 ==============
 
+
+
 Jeu en ligne permettant de parier sur la ville qui utilise le plus les vélos publiques !
 
+
+
 Ce qui fonctionne :
+
+
+
 
 
 La liste des classements des villes par rapport aux kilomètres. (Onglet Classement)
@@ -24,12 +31,15 @@ On peut parier quand on veut sauf si on déjà parié aujourd'hui ( dans les 24h
 Ce qui ne fonctionne pas :
 
 
-En local cela fonctionne mais pas en version déployée: La vision de ses paris précédents on ne voit pas la ville.
+
 
 
 
 
 Auteurs :
+
+
+
 
 Le Corre Anna
 
